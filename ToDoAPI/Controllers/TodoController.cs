@@ -19,6 +19,7 @@ namespace ToDoAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Todo>>> GetTodos()
         {
+            await Task.Delay(3000);
             var todos = await todoService.GetTodosAsync();
             return Ok(todos);
         }
