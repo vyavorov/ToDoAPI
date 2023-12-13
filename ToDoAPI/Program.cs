@@ -30,6 +30,13 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+// Seed data during application startup
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    TodoSeeder.Seed(services);
+}
+
 app.MapControllers();
 
 app.Run();
