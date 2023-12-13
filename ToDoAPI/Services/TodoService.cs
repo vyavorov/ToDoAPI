@@ -31,7 +31,15 @@ public class TodoService : ITodoService
 
     public async Task<Todo> GetTodoByIdAsync(int id)
     {
-        return await dbContext.Todos.FindAsync(id);
+        var todo = await dbContext.Todos.FindAsync(id);
+
+        if (todo == null)
+        {
+            // Handle the case where the entity with the specified id is not found
+            throw new NullReferenceException($"Todo with id {id} not found");
+        }
+
+        return todo;
     }
 
     public async Task<List<Todo>> GetTodosAsync()
@@ -39,8 +47,9 @@ public class TodoService : ITodoService
         return await dbContext.Todos.ToListAsync();
     }
 
-    public Task UpdateTodoAsync(Todo todo)
+    public async Task UpdateTodoAsync(Todo todo)
     {
-        throw new NotImplementedException();
+        dbContext.Entry(todo).State = EntityState.Modified;
+        await dbContext.SaveChangesAsync();
     }
 }
