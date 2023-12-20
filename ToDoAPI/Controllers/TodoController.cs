@@ -17,10 +17,10 @@ namespace ToDoAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Todo>>> GetTodos()
+        public async Task<ActionResult<List<Todo>>> GetTodos([FromQuery] int page)
         {
-            await Task.Delay(3000);
-            var todos = await todoService.GetTodosAsync();
+            //await Task.Delay(1000);
+            var todos = await todoService.GetTodosAsync(page);
             return Ok(todos);
         }
 
