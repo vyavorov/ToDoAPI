@@ -24,6 +24,13 @@ namespace ToDoAPI.Controllers
             return Ok(todos);
         }
 
+        [HttpGet]
+        [Route("/api/todos/count")]
+        public async Task<int> GetTodosCount()
+        {
+            return await todoService.GetTodosCount();
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Todo>> GetTodoById(int id)
         {
