@@ -59,4 +59,9 @@ public class TodoService : ITodoService
         dbContext.Entry(todo).State = EntityState.Modified;
         await dbContext.SaveChangesAsync();
     }
+
+    public async Task<int> GetTodosCount()
+    {
+        return await dbContext.Todos.CountAsync();
+    }
 }
