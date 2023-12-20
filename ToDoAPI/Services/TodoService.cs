@@ -42,9 +42,16 @@ public class TodoService : ITodoService
         return todo;
     }
 
-    public async Task<List<Todo>> GetTodosAsync()
+    public async Task<List<Todo>> GetTodosAsync(int pageToShow)
     {
-        return await dbContext.Todos.ToListAsync();
+        int pageSize = 5;
+        
+        var todos = await dbContext.Todos
+            .OrderByDescending(t => t)
+            .Skip(pageToShow * pageSize - pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        return todos;
     }
 
     public async Task UpdateTodoAsync(Todo todo)
