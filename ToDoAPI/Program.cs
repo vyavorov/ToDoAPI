@@ -3,6 +3,10 @@ using Microsoft.Extensions.Configuration;
 using ToDoAPI.Data;
 using ToDoAPI.Services;
 using ToDoAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using ToDoAPI.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +32,24 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = JwtConfiguration.Issuer,
+        ValidAudience = JwtConfiguration.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtConfiguration.SecretKey))
+    };
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -42,6 +64,8 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseCors("AllowLocalHost");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

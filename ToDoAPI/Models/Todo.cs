@@ -4,6 +4,8 @@ namespace ToDoAPI.Models
 {
     public class Todo
     {
+        [Key]
+        [Required]
         public int Id { get; set; }
 
         [Required]
