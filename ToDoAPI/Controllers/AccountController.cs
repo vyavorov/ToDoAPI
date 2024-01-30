@@ -3,6 +3,7 @@ using ToDoAPI.Data;
 using ToDoAPI.DTOs;
 using ToDoAPI.Models;
 using ToDoAPI.Services.Interfaces;
+using ToDoAPI.Utilities;
 
 namespace ToDoAPI.Controllers;
 
@@ -49,6 +50,26 @@ public class AccountController : Controller
         catch (Exception ex)
         {
             // Log the exception for debugging purposes
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpPost("login")]
+    public IActionResult Login([FromBody] UserDto userDto)
+    {
+        try
+        {
+
+            if (_accountService.CheckIfEmailAndPasswordAreCorrect(userDto.Email, userDto.Password))
+            {
+                var token = JwtTokenSettings.GenerateRandomSecretKey();
+
+                return Ok(new { Token = token });
+            }
+            return Unauthorized("Invalid username or password");
+        } catch (Exception ex)
+        {
             Console.WriteLine(ex.Message);
             return StatusCode(500, "Internal server error");
         }

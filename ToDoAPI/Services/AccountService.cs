@@ -9,10 +9,27 @@ namespace ToDoAPI.Services;
 public class AccountService : IAccountService
 {
     private readonly AppDbContext _dbContext;
+    private readonly IPasswordHashService _passwordHashService;
 
-    public AccountService(AppDbContext _dbContext)
+    public AccountService(AppDbContext _dbContext, IPasswordHashService passwordHashService)
     {
         this._dbContext = _dbContext;
+        _passwordHashService = passwordHashService;
+    }
+
+    public bool CheckIfEmailAndPasswordAreCorrect(string email, string password)
+    {
+        var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+        if (user != null)
+        {
+            bool isPasswordCorrect = _passwordHashService.VerifyPassword(password, user.PasswordHash);
+            if (isPasswordCorrect)
+            {
+                return true;
+            }
+        }
+        return false;
+
     }
 
     public async Task<bool> CheckIfEmailInDbAsync(UserDto user)

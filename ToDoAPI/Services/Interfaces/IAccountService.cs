@@ -11,5 +11,6 @@ public interface IAccountService
 
     public Task<bool> CheckIfEmailIsValid(UserDto user);
 
+    public bool CheckIfEmailAndPasswordAreCorrect(string email, string password);
 
 }
