@@ -47,4 +47,14 @@ public class AccountService : IAccountService
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task<Guid> GetUserIdByEmail(string email)
+    {
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+        if (user != null)
+        {
+            return user.Id;
+        }
+        throw new Exception("There's not a user with this email");
+    }
 }

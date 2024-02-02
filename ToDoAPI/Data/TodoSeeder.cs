@@ -11,14 +11,14 @@ public static class TodoSeeder
         {
             context.Database.EnsureCreated();
 
-            if (!context.Todos.Any())
-            {
-                context.Todos.AddRange(
-                    new Todo { Title = "Buy groceries", isCompleted = false },
-                    new Todo { Title = "Write code", isCompleted = false }
-                    );
-                context.SaveChanges();
-            }
+            //if (!context.Todos.Any())
+            //{
+            //    context.Todos.AddRange(
+            //        new Todo { Title = "Buy groceries", isCompleted = false },
+            //        new Todo { Title = "Write code", isCompleted = false }
+            //        );
+            //    context.SaveChanges();
+            //}
         }
     }
 }

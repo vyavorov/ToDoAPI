@@ -27,12 +27,12 @@ public class AccountController : Controller
         {
             if (await _accountService.CheckIfEmailInDbAsync(userDto))
             {
-                return BadRequest("This email has already been registered.");
+                return BadRequest(new { message = "This email has already been registered." });
             }
 
             if (!await _accountService.CheckIfEmailIsValid(userDto))
             {
-                return BadRequest("Invalid email. Please provide a valid email address.");
+                return BadRequest(new { message = "Invalid email. Please provide a valid email address." });
             }
 
             string hashedPassword = _passwordService.HashPassword(userDto.Password);
@@ -56,19 +56,21 @@ public class AccountController : Controller
     }
 
     [HttpPost("login")]
-    public IActionResult Login([FromBody] UserDto userDto)
+    public async Task<IActionResult> Login([FromBody] UserDto userDto)
     {
         try
         {
 
             if (_accountService.CheckIfEmailAndPasswordAreCorrect(userDto.Email, userDto.Password))
             {
-                var token = JwtTokenSettings.GenerateRandomSecretKey();
+                var userId = await _accountService.GetUserIdByEmail(userDto.Email);
+                var token = JwtUtility.GenerateToken(userDto.Email, userId);
 
                 return Ok(new { Token = token });
             }
-            return Unauthorized("Invalid username or password");
-        } catch (Exception ex)
+            return Unauthorized(new { message = "Invalid username or password" });
+        }
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
             return StatusCode(500, "Internal server error");

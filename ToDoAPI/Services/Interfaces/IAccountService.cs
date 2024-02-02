@@ -13,4 +13,6 @@ public interface IAccountService
 
     public bool CheckIfEmailAndPasswordAreCorrect(string email, string password);
 
+    public Task<Guid> GetUserIdByEmail(string email);
+
 }

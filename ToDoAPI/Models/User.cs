@@ -14,4 +14,6 @@ public class User
     [Required]
     public string PasswordHash { get; set; } = null!;
 
+    public ICollection<Todo> Todos { get; set; }  = new List<Todo>();
+
 }

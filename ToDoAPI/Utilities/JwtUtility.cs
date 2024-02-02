@@ -11,11 +11,12 @@ namespace ToDoAPI.Utilities
     {
         private static readonly string SecretKey = JwtTokenSettings.GenerateRandomSecretKey();
 
-        public static string GenerateToken(string email)
+        public static string GenerateToken(string email, Guid userId)
         {
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 // Add additional claims as needed
             };
 
@@ -31,6 +32,25 @@ namespace ToDoAPI.Utilities
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public static string ValidateToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(SecretKey);
+
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidIssuer = JwtConfiguration.Issuer,
+                ValidAudience = JwtConfiguration.Audience
+            }, out var validatedToken);
+
+            var jwtToken = (JwtSecurityToken)validatedToken;
+            return jwtToken?.Claims.First(c => c.Type == ClaimTypes.Email).Value;
         }
     }
 }

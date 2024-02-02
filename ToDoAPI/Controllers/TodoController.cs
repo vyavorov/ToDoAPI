@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ToDoAPI.Data;
 using ToDoAPI.Models;
 using ToDoAPI.Services;
@@ -77,6 +78,7 @@ namespace ToDoAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodo(int id)
         {
