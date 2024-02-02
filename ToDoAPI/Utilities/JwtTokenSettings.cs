@@ -1,13 +1,11 @@
-﻿namespace ToDoAPI.Utilities;
+﻿using Microsoft.Extensions.Configuration;
+
+namespace ToDoAPI.Utilities;
 
 public static class JwtTokenSettings
 {
-    public static string GenerateRandomSecretKey()
+    public static string GetSecretKey(IConfiguration configuration)
     {
-        var random = new Random();
-        var bytes = new byte[32];
-
-        random.NextBytes(bytes);
-        return Convert.ToBase64String(bytes);
+        return configuration.GetValue<string>("Jwt:SecretKey");
     }
 }

@@ -10,6 +10,9 @@ using ToDoAPI.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var secretKey = JwtTokenSettings.GetSecretKey(builder.Configuration);
+var key = Encoding.UTF8.GetBytes(secretKey);
+
 // Add services to the container.
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -48,7 +51,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = JwtConfiguration.Issuer,
         ValidAudience = JwtConfiguration.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtConfiguration.SecretKey))
+        IssuerSigningKey = new SymmetricSecurityKey(key)
     };
 });
 

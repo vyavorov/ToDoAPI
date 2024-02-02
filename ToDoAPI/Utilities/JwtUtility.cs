@@ -9,9 +9,7 @@ namespace ToDoAPI.Utilities
 {
     public static class JwtUtility
     {
-        private static readonly string SecretKey = JwtTokenSettings.GenerateRandomSecretKey();
-
-        public static string GenerateToken(string email, Guid userId)
+        public static string GenerateToken(string email, Guid userId, string sectetKey)
         {
             var claims = new[]
             {
@@ -20,7 +18,7 @@ namespace ToDoAPI.Utilities
                 // Add additional claims as needed
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(sectetKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
@@ -34,10 +32,10 @@ namespace ToDoAPI.Utilities
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public static string ValidateToken(string token)
+        public static string ValidateToken(string token, string secretKey)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(SecretKey);
+            var key = Encoding.UTF8.GetBytes(secretKey);
 
             tokenHandler.ValidateToken(token, new TokenValidationParameters
             {

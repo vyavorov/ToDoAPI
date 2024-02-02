@@ -12,12 +12,14 @@ public class AccountController : Controller
     private readonly AppDbContext _context;
     private readonly IAccountService _accountService;
     private readonly IPasswordHashService _passwordService;
+    private readonly IConfiguration _configuration;
 
-    public AccountController(AppDbContext _context, IAccountService _accountService, IPasswordHashService _passwordService)
+    public AccountController(AppDbContext _context, IAccountService _accountService, IPasswordHashService _passwordService, IConfiguration configuration)
     {
         this._context = _context;
         this._accountService = _accountService;
         this._passwordService = _passwordService;
+        _configuration = configuration;
     }
 
     [HttpPost("register")]
@@ -63,8 +65,9 @@ public class AccountController : Controller
 
             if (_accountService.CheckIfEmailAndPasswordAreCorrect(userDto.Email, userDto.Password))
             {
+                var secretKey = _configuration.GetValue<string>("Jwt:SecretKey");
                 var userId = await _accountService.GetUserIdByEmail(userDto.Email);
-                var token = JwtUtility.GenerateToken(userDto.Email, userId);
+                var token = JwtUtility.GenerateToken(userDto.Email, userId, secretKey);
 
                 return Ok(new { Token = token });
             }

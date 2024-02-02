@@ -7,10 +7,12 @@ namespace ToDoAPI.Middleware
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly IConfiguration _configuration;
 
-        public JwtMiddleware(RequestDelegate next)
+        public JwtMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             _next = next;
+            _configuration = configuration;
         }
 
         public async Task Invoke(HttpContext context)
@@ -28,7 +30,8 @@ namespace ToDoAPI.Middleware
         {
             try
             {
-                var email = JwtUtility.ValidateToken(token);
+                var secretKey = _configuration.GetValue<string>("Jwt:SecretKey");
+                var email = JwtUtility.ValidateToken(token, secretKey);
 
                 // Attach the user to the context
                 context.Items["User"] = email;
