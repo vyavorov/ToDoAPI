@@ -15,4 +15,6 @@ public interface IAccountService
 
     public Task<Guid> GetUserIdByEmail(string email);
 
+    public Task ChangePassword(ChangePasswordDto changePasswordDto);
+
 }

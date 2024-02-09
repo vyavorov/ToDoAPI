@@ -57,4 +57,16 @@ public class AccountService : IAccountService
         }
         throw new Exception("There's not a user with this email");
     }
+
+    public async Task ChangePassword(ChangePasswordDto changePasswordDto)
+    {
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == changePasswordDto.Email);
+        if (user == null)
+        {
+            throw new Exception("Email not exist in the database");
+        }
+        var newHashedPassword = _passwordHashService.HashPassword(changePasswordDto.NewPassword);
+        user.PasswordHash = newHashedPassword;
+        await _dbContext.SaveChangesAsync();
+    }
 }

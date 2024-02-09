@@ -79,4 +79,24 @@ public class AccountController : Controller
             return StatusCode(500, "Internal server error");
         }
     }
+
+    [HttpPost("changePassword")]
+
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
+    {
+        try
+        {
+            if (_accountService.CheckIfEmailAndPasswordAreCorrect(changePasswordDto.Email, changePasswordDto.Password))
+            {
+                await _accountService.ChangePassword(changePasswordDto);
+                return Ok();
+            }
+            return Unauthorized(new { message = "Password is wrong for this account" });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, "Internal server error");
+        }
+    }
 }
