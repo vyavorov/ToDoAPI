@@ -36,19 +36,29 @@ namespace ToDoAPI.Utilities
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(secretKey);
-
-            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            try
             {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidIssuer = JwtConfiguration.Issuer,
-                ValidAudience = JwtConfiguration.Audience
-            }, out var validatedToken);
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = JwtConfiguration.Issuer,
+                    ValidAudience = JwtConfiguration.Audience
+                }, out var validatedToken);
 
-            var jwtToken = (JwtSecurityToken)validatedToken;
-            return jwtToken?.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                return jwtToken?.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+            }
+            catch (SecurityTokenExpiredException ex)
+            {
+                throw new SecurityTokenExpiredException("Token has expired", ex);
+            }
+            catch (SecurityTokenException ex)
+            {
+                throw new SecurityTokenException("Invalid token", ex);
+            }
         }
     }
 }

@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Reflection.Metadata;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 using ToDoAPI.Utilities;
 
 namespace ToDoAPI.Middleware
@@ -21,8 +24,24 @@ namespace ToDoAPI.Middleware
 
             if (token != null)
             {
-                AttachUserToContext(context, token);
+                try
+                {
+                    AttachUserToContext(context, token);
+                }
+                catch (SecurityTokenExpiredException)
+                {
+                    context.Response.StatusCode = 401;
+                    await context.Response.WriteAsync("Token has expired");
+                    return;
+                }
+                catch (SecurityTokenException)
+                {
+                    context.Response.StatusCode = 401;
+                    await context.Response.WriteAsync("Invalid token");
+                    return;
+                }
             }
+
             await _next(context);
         }
 
