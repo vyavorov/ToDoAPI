@@ -16,4 +16,6 @@ public class User
 
     public ICollection<Todo> Todos { get; set; }  = new List<Todo>();
 
+    public bool EmailConfirmed { get; set; } = false;
+
 }
