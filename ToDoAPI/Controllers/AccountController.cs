@@ -50,10 +50,10 @@ public class AccountController : Controller
                 VerificationToken = emailVerificationToken,
             };
 
-            await _accountService.RegisterAsync(user);
-
             var verificationLink = Url.Action("VerifyEmail", "Account", new { token = emailVerificationToken }, Request.Scheme);
             await _emailService.SendEmailAsync(userDto.Email, "Verify your email", $"Please verify your email by clicking <a href=\"{verificationLink}\">here</a>.");
+
+            await _accountService.RegisterAsync(user);
 
             return Ok("Registration successful. Please check your email to verify your account.");
         }
