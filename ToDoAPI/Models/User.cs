@@ -18,4 +18,6 @@ public class User
 
     public bool EmailConfirmed { get; set; } = false;
 
+    public Guid? VerificationToken { get; set; }
+
 }
