@@ -73,6 +73,10 @@ public class AccountController : Controller
 
             if (_accountService.CheckIfEmailAndPasswordAreCorrect(userDto.Email, userDto.Password))
             {
+                if (!await _accountService.IsEmailConfirmed(userDto.Email))
+                {
+                    return Unauthorized(new { message = "Email has not been confirmed" });
+                }
                 var secretKey = _configuration.GetValue<string>("Jwt:SecretKey");
                 var userId = await _accountService.GetUserIdByEmail(userDto.Email);
                 var token = JwtUtility.GenerateToken(userDto.Email, userId, secretKey);
@@ -111,21 +115,12 @@ public class AccountController : Controller
     [HttpGet("verify-email")]
     public async Task<IActionResult> VerifyEmail(Guid token)
     {
-        // Find the user by the verification token
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.VerificationToken == token);
+        var result = await _accountService.VerifyEmailAsync(token);
 
-        // Check if the user exists and the email is not already verified
-        if (user == null || user.EmailConfirmed)
+        if (!result)
         {
             return BadRequest("Invalid or expired verification token.");
         }
-
-        // Verify the email
-        user.EmailConfirmed = true;
-        user.VerificationToken = null; // Clear the verification token after successful verification
-
-        // Save the changes to the database
-        await _context.SaveChangesAsync();
 
         return Ok("Email verified successfully.");
     }

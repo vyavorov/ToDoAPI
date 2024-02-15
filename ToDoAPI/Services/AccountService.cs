@@ -69,4 +69,33 @@ public class AccountService : IAccountService
         user.PasswordHash = newHashedPassword;
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task<bool> IsEmailConfirmed(string email)
+    {
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+        if (user == null)
+        {
+            throw new Exception("Email not exist in the database");
+        }
+        return user.EmailConfirmed;
+    }
+
+    public async Task<bool> VerifyEmailAsync(Guid token)
+    {
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.VerificationToken == token);
+        if (user == null || user.EmailConfirmed)
+        {
+            return false; // Email verification failed
+        }
+
+        // Verify the email
+        user.EmailConfirmed = true;
+        user.VerificationToken = null; // Clear the verification token after successful verification
+
+        // Save the changes to the database
+        await _dbContext.SaveChangesAsync();
+
+        return true; // Email verification succeeded
+    }
+
 }

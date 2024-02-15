@@ -17,4 +17,9 @@ public interface IAccountService
 
     public Task ChangePassword(ChangePasswordDto changePasswordDto);
 
+    public Task<bool> IsEmailConfirmed(string email);
+
+    Task<bool> VerifyEmailAsync(Guid token);
+
+
 }
