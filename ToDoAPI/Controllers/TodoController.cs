@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using ToDoAPI.Data;
+using ToDoAPI.DTOs;
 using ToDoAPI.Models;
 using ToDoAPI.Services;
 using ToDoAPI.Services.Interfaces;
@@ -18,10 +20,16 @@ namespace ToDoAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Todo>>> GetTodos([FromQuery] int page)
+        public async Task<ActionResult<List<TodoDto>>> GetTodos([FromQuery] int page)
         {
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not authorized.");
+            }
             //await Task.Delay(1000);
-            var todos = await todoService.GetTodosAsync(page);
+            var todos = await todoService.GetTodosAsync(page, userEmail);
             return Ok(todos);
         }
 

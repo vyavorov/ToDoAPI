@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ToDoAPI.Data;
+using ToDoAPI.DTOs;
 using ToDoAPI.Models;
 using ToDoAPI.Services.Interfaces;
 
@@ -42,12 +43,26 @@ public class TodoService : ITodoService
         return todo;
     }
 
-    public async Task<List<Todo>> GetTodosAsync(int pageToShow)
+    public async Task<List<TodoDto>> GetTodosAsync(int pageToShow, string ownerEmail)
     {
         int pageSize = 5;
+
+        var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == ownerEmail);
+
+        if (user == null)
+        {
+            throw new Exception("Email does not exist");
+        }
         
         var todos = await dbContext.Todos
+            .Where(t => t.OwnerId == user.Id)
             .OrderByDescending(t => t)
+            .Select(t => new TodoDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                IsCompleted = t.isCompleted
+            })
             .Skip(pageToShow * pageSize - pageSize)
             .Take(pageSize)
             .ToListAsync();
