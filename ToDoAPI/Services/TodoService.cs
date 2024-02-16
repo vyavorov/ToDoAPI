@@ -75,8 +75,8 @@ public class TodoService : ITodoService
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task<int> GetTodosCount()
+    public async Task<int> GetTodosCount(string email)
     {
-        return await dbContext.Todos.CountAsync();
+        return await dbContext.Todos.Where(t => t.Owner.Email == email).CountAsync();
     }
 }

@@ -10,5 +10,5 @@ public interface ITodoService
     Task AddTodoAsync(Todo todo);
     Task UpdateTodoAsync(Todo todo);
     Task DeleteTodoAsync(int id);
-    Task<int> GetTodosCount();
+    Task<int> GetTodosCount(string email);
 }

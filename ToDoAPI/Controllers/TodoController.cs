@@ -35,9 +35,14 @@ namespace ToDoAPI.Controllers
 
         [HttpGet]
         [Route("/api/todos/count")]
-        public async Task<int> GetTodosCount()
+        public async Task<ActionResult<int>> GetTodosCount()
         {
-            return await todoService.GetTodosCount();
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not authorized.");
+            }
+            return await todoService.GetTodosCount(userEmail);
         }
 
         [HttpGet("{id}")]
