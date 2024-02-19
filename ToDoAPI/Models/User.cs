@@ -20,4 +20,6 @@ public class User
 
     public Guid? VerificationToken { get; set; }
 
+    public DateTime? VerificationTokenExpiration { get; set; }
+
 }

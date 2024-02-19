@@ -83,7 +83,7 @@ public class AccountService : IAccountService
     public async Task<bool> VerifyEmailAsync(Guid token)
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.VerificationToken == token);
-        if (user == null || user.EmailConfirmed)
+        if (user == null || user.EmailConfirmed || user.VerificationTokenExpiration < DateTime.UtcNow)
         {
             return false; // Email verification failed
         }

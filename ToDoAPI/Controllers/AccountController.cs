@@ -48,6 +48,7 @@ public class AccountController : Controller
                 Email = userDto.Email,
                 PasswordHash = hashedPassword,
                 VerificationToken = emailVerificationToken,
+                VerificationTokenExpiration = DateTime.UtcNow.AddHours(24)
             };
 
             var verificationLink = Url.Action("VerifyEmail", "Account", new { token = emailVerificationToken }, Request.Scheme);
