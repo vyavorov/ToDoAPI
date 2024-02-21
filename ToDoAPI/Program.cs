@@ -15,8 +15,12 @@ var key = Encoding.UTF8.GetBytes(secretKey);
 
 // Add services to the container.
 
+//builder.Services.AddDbContext<AppDbContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("Default connection")));
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default connection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Postgre")));
+
 builder.Services.AddScoped<ITodoService, TodoService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
