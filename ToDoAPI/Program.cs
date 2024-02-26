@@ -79,6 +79,8 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+app.UseRouting();
+
 app.UseCors("CustomCorsPolicy");
 
 // Configure the HTTP request pipeline.
@@ -101,10 +103,6 @@ app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-//app.UseRouting();
-
-
 
 // Seed data during application startup
 using (var scope = app.Services.CreateScope())
