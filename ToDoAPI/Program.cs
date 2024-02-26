@@ -51,11 +51,11 @@ builder.Services.AddCors(options =>
     //        .AllowAnyMethod()
     //        .AllowAnyHeader();
     //});
-    options.AddPolicy("CustomCorsPolicy", policy =>
+    options.AddPolicy("AllowLocalHost", builder =>
     {
-        policy.WithOrigins("http://localhost:5173", "https://todoappbyventsy-579eed981c0e.herokuapp.com")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        builder.WithOrigins("https://todoappbyventsy-579eed981c0e.herokuapp.com")
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
 });
 
@@ -96,7 +96,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCors("CustomCorsPolicy");
+app.UseCors("AllowLocalHost");
 
 app.UseAuthentication();
 
