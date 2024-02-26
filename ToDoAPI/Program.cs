@@ -45,11 +45,17 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalHost", builder =>
+    //options.AddPolicy("AllowLocalHost", builder =>
+    //{
+    //    builder.WithOrigins("http://localhost:5173", "https://todoappbyventsy-579eed981c0e.herokuapp.com")
+    //        .AllowAnyMethod()
+    //        .AllowAnyHeader();
+    //});
+    options.AddPolicy("CustomCorsPolicy", policy =>
     {
-        builder.WithOrigins("http://localhost:5173", "https://todoappbyventsy-579eed981c0e.herokuapp.com")
-            .AllowAnyMethod()
-            .AllowAnyHeader();
+        policy.WithOrigins("http://localhost:5173", "https://todoappbyventsy-579eed981c0e.herokuapp.com")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
