@@ -52,12 +52,12 @@ builder.Services.AddCors(options =>
     //        .AllowAnyHeader();
     //});
     options.AddPolicy("CustomCorsPolicy", policy =>
-{
-    policy.WithOrigins("http://localhost:5173", "https://todoappbyventsy-579eed981c0e.herokuapp.com", "http://todoappbyventsy-579eed981c0e.herokuapp.com")
-    .AllowCredentials()
-          .AllowAnyHeader()
-          .AllowAnyMethod();
-});
+    {
+        policy.WithOrigins("http://localhost:5173", "https://todoappbyventsy-579eed981c0e.herokuapp.com", "http://todoappbyventsy-579eed981c0e.herokuapp.com")
+            .AllowCredentials()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 });
 
 builder.Services.AddAuthentication(options =>
@@ -80,6 +80,8 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+app.UseCors("CustomCorsPolicy");
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -92,16 +94,16 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseCors("CustomCorsPolicy");
-
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+//app.UseRouting();
+
+
 
 // Seed data during application startup
 using (var scope = app.Services.CreateScope())
