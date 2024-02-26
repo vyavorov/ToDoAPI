@@ -53,7 +53,7 @@ builder.Services.AddCors(options =>
     //});
     options.AddPolicy("CustomCorsPolicy", policy =>
 {
-    policy.WithOrigins("http://localhost:5173", "https://todoappbyventsy-579eed981c0e.herokuapp.com")
+    policy.WithOrigins("http://localhost:5173", "https://todoappbyventsy-579eed981c0e.herokuapp.com", "http://todoappbyventsy-579eed981c0e.herokuapp.com")
     .AllowCredentials()
           .AllowAnyHeader()
           .AllowAnyMethod();
