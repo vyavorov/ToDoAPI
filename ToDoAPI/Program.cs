@@ -95,6 +95,8 @@ else
 
 app.UseAuthentication();
 
+app.UseDeveloperExceptionPage();
+
 app.UseAuthorization();
 
 app.UseHttpsRedirection();
