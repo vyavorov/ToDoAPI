@@ -53,8 +53,7 @@ builder.Services.AddCors(options =>
     //});
     options.AddPolicy("CustomCorsPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "https://todoappbyventsy-579eed981c0e.herokuapp.com", "http://todoappbyventsy-579eed981c0e.herokuapp.com")
-            .AllowCredentials()
+        policy.WithOrigins("*")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -83,7 +82,7 @@ var app = builder.Build();
 app.UseCors("CustomCorsPolicy");
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (true)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
