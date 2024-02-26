@@ -96,7 +96,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCors("AllowLocalHost");
+app.UseCors("CustomCorsPolicy");
 
 app.UseAuthentication();
 
