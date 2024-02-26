@@ -51,7 +51,7 @@ builder.Services.AddCors(options =>
     //        .AllowAnyMethod()
     //        .AllowAnyHeader();
     //});
-    options.AddPolicy("CustomCorsPolicy", policy =>
+    options.AddDefaultPolicy(policy =>
     {
         policy.WithOrigins("*")
             .AllowAnyHeader()
@@ -81,7 +81,8 @@ var app = builder.Build();
 
 app.UseRouting();
 
-app.UseCors("CustomCorsPolicy");
+//app.UseCors("CustomCorsPolicy");
+app.UseCors();
 
 // Configure the HTTP request pipeline.
 if (true)
