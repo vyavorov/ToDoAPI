@@ -47,7 +47,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalHost", builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins("https://todoappbyventsy-579eed981c0e.herokuapp.com/login", "http://todoappbyventsy-579eed981c0e.herokuapp.com/login")
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
