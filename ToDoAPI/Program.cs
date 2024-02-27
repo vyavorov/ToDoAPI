@@ -43,20 +43,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalHost", builder =>
+    options.AddPolicy("CustomCorsPolicy", builder =>
     {
-        builder.WithOrigins("https://todoappbyventsy-579eed981c0e.herokuapp.com/login", "http://todoappbyventsy-579eed981c0e.herokuapp.com/login")
+        builder.WithOrigins("https://todoappbyventsy-579eed981c0e.herokuapp.com", "http://todoappbyventsy-579eed981c0e.herokuapp.com", "http://localhost:5173")
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
-    //options.AddDefaultPolicy(policy =>
-    //{
-    //    policy.AllowAnyOrigin()
-    //        .AllowAnyHeader()
-    //        .AllowAnyMethod();
-    //});
 });
 
 builder.Services.AddAuthentication(options =>
@@ -79,10 +74,10 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+app.UseCors("CustomCorsPolicy");
+
 app.UseRouting();
 
-//app.UseCors("CustomCorsPolicy");
-app.UseCors("AllowLocalHost");
 
 // Configure the HTTP request pipeline.
 if (true)
