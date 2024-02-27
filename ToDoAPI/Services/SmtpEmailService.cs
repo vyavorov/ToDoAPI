@@ -20,10 +20,10 @@ public class SmtpEmailService : IEmailService
         {
             Console.WriteLine($"Attempting to send email to {to}...");
 
-            var email = _configuration["EmailSettings:Email"];
-            var password = _configuration["EmailSettings:Password"];
-            var smtpServer = _configuration["EmailSettings:SmtpServer"];
-            var port = int.Parse(_configuration["EmailSettings:Port"]);
+            var email = Environment.GetEnvironmentVariable("EmailSettings:Email") ?? _configuration["EmailSettings:Email"];
+            var password = Environment.GetEnvironmentVariable("EmailSettings:Password") ?? _configuration["EmailSettings:Password"];
+            var smtpServer = Environment.GetEnvironmentVariable("EmailSettings:SmtpServer") ?? _configuration["EmailSettings:SmtpServer"];
+            var port = int.Parse(Environment.GetEnvironmentVariable("EmailSettings:Port") ?? _configuration["EmailSettings:Port"]);
 
             using (var client = new SmtpClient(smtpServer, port)
             {
