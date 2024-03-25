@@ -10,4 +10,6 @@ public class AppDbContext : DbContext
     public DbSet<Todo> Todos { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
 
+    public DbSet<Family> Families { get; set; } = null!;
+
 }

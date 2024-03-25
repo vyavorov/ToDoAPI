@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToDoAPI.Models;
 
@@ -22,5 +23,10 @@ public class User
     public Guid? VerificationToken { get; set; }
 
     public DateTime? VerificationTokenExpiration { get; set; }
+
+    public Family? Family { get; set; }
+
+    [ForeignKey(nameof(Family))]
+    public Guid FamilyId { get; set; }
 
 }
