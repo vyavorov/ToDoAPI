@@ -27,6 +27,6 @@ public class User
     public Family? Family { get; set; }
 
     [ForeignKey(nameof(Family))]
-    public Guid FamilyId { get; set; }
+    public Guid? FamilyId { get; set; }
 
 }
