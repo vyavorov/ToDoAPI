@@ -19,10 +19,13 @@ public class User
     public ICollection<Todo> Todos { get; set; }  = new List<Todo>();
 
     public bool EmailConfirmed { get; set; } = false;
+    public bool FamilyConfirmed { get; set; } = false;
 
     public Guid? VerificationToken { get; set; }
+    public Guid? FamilyVerificationToken { get; set; }
 
     public DateTime? VerificationTokenExpiration { get; set; }
+    public DateTime? FamilyVerificationTokenExpiration { get; set; }
 
     public Family? Family { get; set; }
 
