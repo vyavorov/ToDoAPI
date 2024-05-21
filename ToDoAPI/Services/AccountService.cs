@@ -58,6 +58,16 @@ public class AccountService : IAccountService
         throw new Exception("There's not a user with this email");
     }
 
+    public async Task<User> GetUserByEmail(string email)
+    {
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+        if (user != null)
+        {
+            return user;
+        }
+        throw new Exception("There's not a user with this email");
+    }
+
     public async Task ChangePassword(ChangePasswordDto changePasswordDto)
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == changePasswordDto.Email);

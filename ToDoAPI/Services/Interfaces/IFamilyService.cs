@@ -4,6 +4,9 @@ namespace ToDoAPI.Services.Interfaces
 {
     public interface IFamilyService
     {
-        Task CreateFamily(string userEmail, string familyName, string invitedUserEmail);
+        Task<bool> CheckEmails(string userEmail, string invitedUserEmail);
+
+        Task<bool> VerifyEmailAsync(Guid token);
+
     }
 }
