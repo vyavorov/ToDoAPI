@@ -48,14 +48,26 @@ public class TodoService : ITodoService
         int pageSize = 5;
 
         var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == ownerEmail);
+        var ownerOrFamilyId = !user.FamilyConfirmed ? user.Id : user.FamilyId;
+        var familyMembers = new List<User>();
 
+        if (user.FamilyConfirmed)
+        {
+            familyMembers = await dbContext.Users.Where(u => u.FamilyId == ownerOrFamilyId && u.FamilyConfirmed).ToListAsync();
+        }
+        else
+        {
+            familyMembers = await dbContext.Users.Where(u => u.Id == ownerOrFamilyId).ToListAsync();
+        }
+        var familyMembersIds = familyMembers.Select(fm => fm.Id).ToList();
         if (user == null)
         {
             throw new Exception("Email does not exist");
         }
         
         var todos = await dbContext.Todos
-            .Where(t => t.OwnerId == user.Id)
+            //.Where(t => t.OwnerId == user.Id)
+            .Where(t => familyMembersIds.Contains(t.OwnerId))
             .OrderByDescending(t => t)
             .Select(t => new TodoDto
             {
